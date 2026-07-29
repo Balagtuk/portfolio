@@ -110,9 +110,21 @@ body.cursor-hover .cursor-glow {
 .logo {
     font-size: 1.5rem;
     font-weight: 800;
+    display: inline-flex;
+    align-items: baseline;
+}
+
+.logo-text {
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.logo-dot {
+    color: #ff1744;
+    -webkit-text-fill-color: #ff1744;
+    text-shadow: 0 0 10px #ff1744, 0 0 20px rgba(255, 23, 68, 0.8);
+    font-weight: 900;
 }
 
 .nav-links {
