@@ -244,6 +244,15 @@
                     <div class="tech-stack">
                         <span>Flutter</span><span>Android</span>
                     </div>
+                    <button class="project-inspect-btn" data-project="conexus"
+                        aria-label="Inspect UI for Coffee Farmer Production Tracker">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <span>View App</span>
+                    </button>
                 </div>
             </div>
             <div class="project-card">
@@ -254,6 +263,14 @@
                     <div class="tech-stack">
                         <span>Flutter</span><span>Android</span>
                     </div>
+                    <button class="project-inspect-btn" data-project="ror" aria-label="Inspect UI for Roasting Tracker">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <span>View App</span>
+                    </button>
                 </div>
             </div>
             <div class="project-card">
@@ -809,6 +826,67 @@
     <footer>
         <p>&copy; 2026 Xander June Rey E. Dela Cruz | All rights reserved.</p>
     </footer>
+
+    <!-- ==================== PROJECT INSPECT MODAL ==================== -->
+    <div id="project-modal" class="project-modal-backdrop" aria-hidden="true">
+        <div class="project-modal-card" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+            <button id="project-modal-close" class="pm-close-btn" aria-label="Close modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="pm-header">
+                <div class="pm-badge" id="pm-badge">Mobile Application</div>
+                <h3 id="pm-title" class="pm-title">Project Title</h3>
+                <p id="pm-description" class="pm-description">Project Description</p>
+                <div class="pm-meta">
+                    <div id="pm-tech" class="tech-stack"></div>
+                    <a id="pm-download-link" href="#" target="_blank" rel="noopener noreferrer" class="pm-download-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span id="pm-download-text">Download Application / View Link</span>
+                    </a>
+                </div>
+            </div>
+            <div class="pm-gallery-section">
+                <h4 class="pm-gallery-title">UI Showcase Screenshots <span class="pm-gallery-hint">(Click any image to
+                        enlarge)</span></h4>
+                <div id="pm-gallery" class="pm-gallery-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== IMAGE LIGHTBOX MODAL ==================== -->
+    <div id="lightbox" class="lightbox-backdrop" aria-hidden="true">
+        <button id="lightbox-close" class="lightbox-close" aria-label="Close image preview">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Enlarged UI preview">
+        </div>
+        <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
 
     <script src="script.js"></script>
 </body>

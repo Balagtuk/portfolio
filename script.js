@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const moonIcon = document.getElementById('moon-icon');
     const sunIcon = document.getElementById('sun-icon');
-    
+
     // Check for saved theme or system preference
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     const setTheme = (isDark) => {
         if (isDark) {
             document.documentElement.setAttribute('data-theme', 'dark');
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Glowing Ambient Cursor Aura ---
     const cursorGlow = document.getElementById('cursor-glow');
-    
+
     if (cursorGlow) {
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const submitBtn = contactForm.querySelector('.submit-btn');
             const accessKeyInput = contactForm.querySelector('input[name="access_key"]');
             const accessKey = accessKeyInput ? accessKeyInput.value.trim() : '';
-            
+
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const subject = document.getElementById('subject').value.trim();
@@ -229,100 +229,234 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     const animatedElements = document.querySelectorAll('.timeline-item, .project-card, .skill-category, .contact-card, .about-me-card');
-    
+
     animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
-        
+
         if (el.classList.contains('timeline-item')) {
             el.style.transform = 'translateY(30px)';
             el.style.transition = `opacity 0.6s ease-out ${index * 0.15}s, transform 0.6s ease-out ${index * 0.15}s`;
         } else if (el.classList.contains('project-card')) {
             el.style.transform = 'translateY(40px)';
             el.style.transition = `opacity 0.6s ease-out ${index * 0.1}s, transform 0.6s ease-out ${index * 0.1}s`;
-        } else if (el.classList.contains('skill-category')) {
-            el.style.transform = 'translateX(-30px)';
-            el.style.transition = `opacity 0.6s ease-out ${index * 0.1}s, transform 0.6s ease-out ${index * 0.1}s`;
         } else {
             el.style.transform = 'translateY(30px)';
             el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
         }
-        
+
         observer.observe(el);
+    });
+
+    // --- Project Inspection Modal Logic ---
+    const projectModal = document.getElementById('project-modal');
+    const projectModalClose = document.getElementById('project-modal-close');
+    const pmBadge = document.getElementById('pm-badge');
+    const pmTitle = document.getElementById('pm-title');
+    const pmDescription = document.getElementById('pm-description');
+    const pmTech = document.getElementById('pm-tech');
+    const pmDownloadLink = document.getElementById('pm-download-link');
+    const pmDownloadText = document.getElementById('pm-download-text');
+    const pmGallery = document.getElementById('pm-gallery');
+
+    const projectsData = {
+        conexus: {
+            badge: "Capstone Mobile App",
+            title: "DSSC Capstone: Coffee Farmer Production Tracker",
+            description: "An Android mobile application tailored for local coffee farmers to monitor and optimize production, crop movement, and harvest analytics.",
+            tech: ["Flutter", "Android", "Dart"],
+            downloadUrl: "https://conexus-apk.rcic.dssc.edu.ph/",
+            downloadText: "Download Application (APK)",
+            images: [
+                { src: "assets/ui/conexus/1.jpg", alt: "Production Tracker UI Screen 1" },
+                { src: "assets/ui/conexus/2.jpg", alt: "Production Tracker UI Screen 2" },
+                { src: "assets/ui/conexus/3.jpg", alt: "Production Tracker UI Screen 3" },
+                { src: "assets/ui/conexus/4.jpg", alt: "Production Tracker UI Screen 4" },
+                { src: "assets/ui/conexus/5.jpg", alt: "Production Tracker UI Screen 5" },
+                { src: "assets/ui/conexus/6.jpg", alt: "Production Tracker UI Screen 6" },
+                { src: "assets/ui/conexus/7.jpg", alt: "Production Tracker UI Screen 7" }
+            ]
+        },
+        ror: {
+            badge: "RCIC Mobile App",
+            title: "Regional Coffee Innovation Center: Roasting Tracker",
+            description: "An Android application engineered to track coffee roasting parameters, batch profiles, and cycle logs for real-time quality control.",
+            tech: ["Flutter", "Android", "Dart"],
+            downloadUrl: "https://drive.google.com/file/d/1CA5aZ_NcrzWBxt-H4HjBMrLZgPlg1DjG/view",
+            downloadText: "Download via Google Drive",
+            images: [
+                { src: "assets/ui/ror/1.jpg", alt: "Roasting Tracker UI Screen 1" },
+                { src: "assets/ui/ror/2.jpg", alt: "Roasting Tracker UI Screen 2" },
+                { src: "assets/ui/ror/3.jpg", alt: "Roasting Tracker UI Screen 3" },
+                { src: "assets/ui/ror/4.jpg", alt: "Roasting Tracker UI Screen 4" }
+            ]
+        }
+    };
+
+    let activeGalleryItems = [];
+
+    const openProjectModal = (projectId) => {
+        const data = projectsData[projectId];
+        if (!data || !projectModal) return;
+
+        if (pmBadge) pmBadge.textContent = data.badge;
+        if (pmTitle) pmTitle.textContent = data.title;
+        if (pmDescription) pmDescription.textContent = data.description;
+
+        if (pmDownloadLink && pmDownloadText) {
+            pmDownloadLink.href = data.downloadUrl;
+            pmDownloadText.textContent = data.downloadText;
+        }
+
+        if (pmTech) {
+            pmTech.innerHTML = data.tech.map(t => `<span>${t}</span>`).join('');
+        }
+
+        if (pmGallery) {
+            pmGallery.innerHTML = '';
+            activeGalleryItems = data.images;
+
+            data.images.forEach((imgObj, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'pm-gallery-item';
+                itemDiv.innerHTML = `<img src="${imgObj.src}" alt="${imgObj.alt}" loading="lazy">`;
+
+                itemDiv.addEventListener('click', () => {
+                    if (window.openCustomLightbox) {
+                        window.openCustomLightbox(activeGalleryItems, index);
+                    }
+                });
+
+                pmGallery.appendChild(itemDiv);
+            });
+        }
+
+        projectModal.classList.add('active');
+        projectModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeProjectModal = () => {
+        if (!projectModal) return;
+        projectModal.classList.remove('active');
+        projectModal.setAttribute('aria-hidden', 'true');
+        // Only restore body scrolling if lightbox is not active
+        const lightbox = document.getElementById('lightbox');
+        if (!lightbox || !lightbox.classList.contains('active')) {
+            document.body.style.overflow = '';
+        }
+    };
+
+    const inspectBtns = document.querySelectorAll('.project-inspect-btn');
+    inspectBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const projKey = btn.getAttribute('data-project');
+            openProjectModal(projKey);
+        });
+    });
+
+    if (projectModalClose) {
+        projectModalClose.addEventListener('click', closeProjectModal);
+    }
+
+    if (projectModal) {
+        projectModal.addEventListener('click', (e) => {
+            if (e.target === projectModal) {
+                closeProjectModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && projectModal && projectModal.classList.contains('active')) {
+            const lightbox = document.getElementById('lightbox');
+            // If lightbox is open, let lightbox close first
+            if (!lightbox || !lightbox.classList.contains('active')) {
+                closeProjectModal();
+            }
+        }
     });
 });
 
-// ===================== LIGHTBOX =====================
+// ===================== LIGHTBOX MODAL SYSTEM =====================
 (function () {
-    const lightbox     = document.getElementById('lightbox');
-    const lightboxImg  = document.getElementById('lightbox-img');
-    const closeBtn     = document.getElementById('lightbox-close');
-    const prevBtn      = document.getElementById('lightbox-prev');
-    const nextBtn      = document.getElementById('lightbox-next');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
 
     if (!lightbox || !lightboxImg) return;
 
-    const items = Array.from(document.querySelectorAll('.masonry-item img'));
-    let current = 0;
+    let itemsList = [];
+    let currentIndex = 0;
 
-    function openLightbox(index) {
-        current = index;
-        lightboxImg.src = items[current].src;
-        lightboxImg.alt = items[current].alt;
+    window.openCustomLightbox = function (items, startIndex) {
+        itemsList = items;
+        currentIndex = startIndex;
+
+        lightboxImg.src = itemsList[currentIndex].src;
+        lightboxImg.alt = itemsList[currentIndex].alt;
         lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-    }
+    };
 
     function closeLightbox() {
         lightbox.classList.remove('active');
-        document.body.style.overflow = '';
+        lightbox.setAttribute('aria-hidden', 'true');
+
+        // Restore scroll if project modal is also not active
+        const projectModal = document.getElementById('project-modal');
+        if (!projectModal || !projectModal.classList.contains('active')) {
+            document.body.style.overflow = '';
+        }
         setTimeout(() => { lightboxImg.src = ''; }, 300);
     }
 
     function showPrev() {
-        current = (current - 1 + items.length) % items.length;
+        if (!itemsList.length) return;
+        currentIndex = (currentIndex - 1 + itemsList.length) % itemsList.length;
         lightboxImg.style.opacity = '0';
         lightboxImg.style.transform = 'scale(0.92) translateX(40px)';
         setTimeout(() => {
-            lightboxImg.src = items[current].src;
-            lightboxImg.alt = items[current].alt;
+            lightboxImg.src = itemsList[currentIndex].src;
+            lightboxImg.alt = itemsList[currentIndex].alt;
             lightboxImg.style.opacity = '1';
             lightboxImg.style.transform = 'scale(1) translateX(0)';
-        }, 200);
+        }, 150);
     }
 
     function showNext() {
-        current = (current + 1) % items.length;
+        if (!itemsList.length) return;
+        currentIndex = (currentIndex + 1) % itemsList.length;
         lightboxImg.style.opacity = '0';
         lightboxImg.style.transform = 'scale(0.92) translateX(-40px)';
         setTimeout(() => {
-            lightboxImg.src = items[current].src;
-            lightboxImg.alt = items[current].alt;
+            lightboxImg.src = itemsList[currentIndex].src;
+            lightboxImg.alt = itemsList[currentIndex].alt;
             lightboxImg.style.opacity = '1';
             lightboxImg.style.transform = 'scale(1) translateX(0)';
-        }, 200);
+        }, 150);
     }
 
-    // Smooth transition default
     lightboxImg.style.transition = 'opacity 0.2s ease, transform 0.25s cubic-bezier(0.4,0,0.2,1)';
 
-    items.forEach((img, i) => {
-        img.parentElement.addEventListener('click', () => openLightbox(i));
-    });
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    if (prevBtn) prevBtn.addEventListener('click', showPrev);
+    if (nextBtn) nextBtn.addEventListener('click', showNext);
 
-    closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
-
-    // Click backdrop to close
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
+        if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
+            closeLightbox();
+        }
     });
 
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('active')) return;
-        if (e.key === 'Escape')       closeLightbox();
-        if (e.key === 'ArrowLeft')    showPrev();
-        if (e.key === 'ArrowRight')   showNext();
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
     });
 })();
+
