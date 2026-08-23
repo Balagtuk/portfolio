@@ -251,3 +251,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ===================== LIGHTBOX =====================
+(function () {
+    const lightbox     = document.getElementById('lightbox');
+    const lightboxImg  = document.getElementById('lightbox-img');
+    const closeBtn     = document.getElementById('lightbox-close');
+    const prevBtn      = document.getElementById('lightbox-prev');
+    const nextBtn      = document.getElementById('lightbox-next');
+
+    if (!lightbox || !lightboxImg) return;
+
+    const items = Array.from(document.querySelectorAll('.masonry-item img'));
+    let current = 0;
+
+    function openLightbox(index) {
+        current = index;
+        lightboxImg.src = items[current].src;
+        lightboxImg.alt = items[current].alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => { lightboxImg.src = ''; }, 300);
+    }
+
+    function showPrev() {
+        current = (current - 1 + items.length) % items.length;
+        lightboxImg.style.opacity = '0';
+        lightboxImg.style.transform = 'scale(0.92) translateX(40px)';
+        setTimeout(() => {
+            lightboxImg.src = items[current].src;
+            lightboxImg.alt = items[current].alt;
+            lightboxImg.style.opacity = '1';
+            lightboxImg.style.transform = 'scale(1) translateX(0)';
+        }, 200);
+    }
+
+    function showNext() {
+        current = (current + 1) % items.length;
+        lightboxImg.style.opacity = '0';
+        lightboxImg.style.transform = 'scale(0.92) translateX(-40px)';
+        setTimeout(() => {
+            lightboxImg.src = items[current].src;
+            lightboxImg.alt = items[current].alt;
+            lightboxImg.style.opacity = '1';
+            lightboxImg.style.transform = 'scale(1) translateX(0)';
+        }, 200);
+    }
+
+    // Smooth transition default
+    lightboxImg.style.transition = 'opacity 0.2s ease, transform 0.25s cubic-bezier(0.4,0,0.2,1)';
+
+    items.forEach((img, i) => {
+        img.parentElement.addEventListener('click', () => openLightbox(i));
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', showPrev);
+    nextBtn.addEventListener('click', showNext);
+
+    // Click backdrop to close
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape')       closeLightbox();
+        if (e.key === 'ArrowLeft')    showPrev();
+        if (e.key === 'ArrowRight')   showNext();
+    });
+})();
